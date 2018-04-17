@@ -1,0 +1,220 @@
+---
+title: "Assignment5"
+author: "Andi Liao"
+date: "2016年11月5日"
+output: html_document
+---
+
+#1.
+绘制salary的直方图，设定参数bins为20。
+```{r A histogram of faculty salary}
+library(ggplot2)
+setwd("C:/Users/ThinkPad/Desktop/数据科学导论/data")
+load("Salaries_692402902.RData")
+
+ggplot(Salaries, aes(x=salary))+
+  geom_histogram(bins=20)+
+  labs(title = "A histogram of faculty salary")
+```
+
+#2.
+以years of service为x轴，salary为y轴，绘制散点图，并加上拟合曲线。
+```{r A scatter plot of salary vs. years service with a fitted curve}
+ggplot(Salaries, aes(x = yrs.service, y = salary))+
+  geom_point()+
+  geom_smooth()+
+  labs(title = "Scatter plot of salary vs. years service with a fitted curve")
+```
+
+#3.
+以rank为分类标准，绘制salary的箱线图，打上jitter point。
+```{r A box plot of salary, grouped by rank overlaid with jittered points}
+ggplot(Salaries, aes(x = rank, y = salary))+geom_boxplot()+geom_jitter(alpha = 0.3)+labs(title = "A box plot of salary, grouped by rank overlaid with jittered points")
+```
+
+#4.
+以rank为分类标准，绘制salary的箱线图，加上violin plot。
+```{r A box plot of salary, grouped by rank plotted on top of a violin plot}
+ggplot(Salaries, aes(x = rank, y = salary))+
+  geom_boxplot()+
+  geom_violin( fill = "blue", alpha = 0.3)+
+  labs(title = "A box plot of salary, grouped by rank plotted on top of a violin plot")
+```
+
+#5.
+以rank为分类标准，统计各个rank涵盖的人数，绘制条形图。
+```{r A bar chart showing the number of people in each rank}
+ggplot(Salaries, aes(x = rank))+
+  geom_bar(width = 0.5) + 
+  labs(title = "A bar chart showing the number of people in each rank")
+```
+
+#6.
+以rank为分类标准，统计各个rank的平均工资，绘制条形图。
+```{r A bar chart showing the average of each rank}
+library(dplyr)
+temp1 = Salaries %>% group_by(rank) %>% summarize(avg_salary = mean(salary))
+ggplot(temp1, aes(x = rank, y = avg_salary))+
+  geom_bar(width = 0.5, stat = "identity") + 
+  labs(title = "A bar chart showing the average of each rank")
+```
+
+#7.
+以years of service为x轴，salary为y轴，rank为颜色标记，绘制散点图。
+```{r A scatter plot of salary vs. years of service color-coded by rank}
+ggplot(Salaries, aes(x = yrs.service, y = salary, color = rank))+
+  geom_point()+
+  labs(title="A scatter plot of salary vs. years of service color-coded by rank")
+
+```
+
+#8.
+以years of service为x轴，salary为y轴，rank为颜色标记，绘制散点图。
+```{r A scatter plot of salary vs. years of service shape-coded by rank}
+ggplot(Salaries, aes(x = yrs.service, y = salary, shape = rank))+
+  geom_point(alpha = 0.5)+
+  labs(title="A scatter plot of salary vs. years of service shape-coded by rank")
+```
+
+#9.
+以rank和sex为分类标准，绘制salary的箱线图。
+```{r A box plot of salary, grouped by rank, subgrouped and colored by sex}
+ggplot(Salaries, aes(x = rank, y = salary, fill = sex))+
+  geom_boxplot()+
+  labs(title="A box plot of salary, grouped by rank, subgrouped and colored by sex")
+```
+
+#10.
+以rank为分类标准，以sex为jitter point上色标准，绘制salary的箱线图。
+```{r A box plot of salary, grouped by rank, unsubgrouped by sex, but overlaid with colored points}
+ggplot(Salaries, aes(x = rank, y = salary))+
+  geom_boxplot(width = 0.3)+
+  geom_jitter(aes(color = sex), alpha = 0.5)+
+  labs(title="A box plot of salary, grouped by rank overlaid with colored points")
+```
+
+#11.
+以rank为分类和上色标准，绘制salary的密度图。
+```{r Density plot of salary color grouped by rank}
+ggplot(Salaries, aes(x = salary, color = rank, fill = rank))+
+  geom_density(alpha = 0.5)+ 
+  labs(title="Density plot of salary color grouped by rank")
+```
+
+#12.
+以sex为分类和上色标准，绘制salary的密度图。
+```{r Density plot of salary color grouped by sex}
+ggplot(Salaries, aes(x = salary, color = sex, fill = sex))+
+  geom_density(alpha = 0.5)+ 
+  labs(title="Density plot of salary color grouped by sex")
+```
+
+#13.
+以rank和sex为分类标准，绘制每个rank和sex所对应的人数条形图。
+```{r A bar plot color-coded by sex, showing number of people in each rank}
+ggplot(Salaries, aes(x = rank,fill = sex))+
+  geom_bar(position = "dodge")+
+  labs(title="A bar plot color-coded by sex, showing number of people in each rank")
+```
+
+#14.
+以rank和sex为分类标准，绘制每个rank和sex所对应的平均工资条形图。
+```{r A bar plot color-coded by sex, showing average salary in each rank}
+temp2 = Salaries %>% group_by(sex, rank) %>% summarize(avg_salary = mean(salary))
+ggplot(temp2, aes(x = rank, y = avg_salary,fill = sex))+
+  geom_bar(stat = "identity", position = "dodge")+
+  labs(title="A bar plot color-coded by sex, showing average salary in each rank")
+```
+
+#15.
+以years of service为x轴，salary为y轴，rank为上色标准，绘制散点图。
+```{r Scatter plot of salary vs. years of service color-coded by rank}
+ggplot(Salaries, aes(x= salary, y = yrs.service,color = rank))+
+  geom_point(alpha = 0.5)+
+  labs(title="Scatter plot of salary vs. years of service color-coded by rank")
+```
+
+#16.
+以years of service为x轴，salary为y轴， 按照sex分别绘制散点图。
+```{r Scatter plot of salary vs. years of service faceted by sex}
+ggplot(Salaries, aes(x= salary, y = yrs.service))+
+  geom_point(alpha = 0.5)+
+  facet_grid(.~sex)+
+  labs(title="Scatter plot of salary vs. years of service faceted by sex")
+```
+
+#17.
+按照sex和rank分别绘制对应salary的密度图。
+```{r Density plot of salary faceted by both sex and rank}
+ggplot(Salaries, aes(x = salary))+
+  geom_density(aes(fill = sex), bw = 10000)+
+  facet_grid(rank~sex)+
+  labs(title="Density plot of salary faceted by both sex and rank")
+```
+
+#18.
+按照sex分别绘制各个rank的salary密度图。
+```{r Density plot of salary color-coded by rank, faceted by sex}
+ggplot(Salaries, aes(x = salary))+
+  geom_density(aes(fill = rank), bw = 15000, alpha = 0.5)+
+  facet_grid(.~sex)+
+  labs(title="Density plot of salary color-coded by rank, faceted by sex")
+```
+
+#19.
+以years of service为x轴，salary为y轴，绘制散点图，改变颜色范围。
+```{r Change the color scale of scatter plot of salary vs.years of service, grouped by rank}
+ggplot(Salaries, aes(x= salary, y = yrs.service, color = rank))+
+  geom_point()+
+  scale_colour_brewer(palette = "Accent")+
+  labs(title="Scatter plot of salary vs.years of service, grouped by rank")
+```
+
+#20.
+按照rank绘制salary的密度图，改变颜色范围。
+```{r Change the color scale of the density plot of salary, grouped by rank}
+ggplot(Salaries,aes(x = salary, fill = rank))+
+  geom_density(alpha =0.5)+
+  scale_fill_brewer(palette = "Accent")+
+  labs(title="Density plot of salary, grouped by rank")
+```
+
+#21.
+按照sex和rank分别绘制对应salary的箱线图，改变X轴标签。
+```{r Boxplot of salary grouped by rank, color-coded  by sex, modify the breaks and labels of rank}
+ggplot(Salaries, aes(x = rank, y =salary, fill =sex))+
+  geom_boxplot()+
+  scale_x_discrete(breaks =c("AsstProf","AssocProf","Prof"), labels=c("Assistant\nProfessor","Associate\nProfessor","Full\nProfessor"))+
+  labs(title="Boxplot of salary grouped by rank, color-coded  by sex")
+```
+
+#22.
+按照sex和rank分别绘制对应salary的箱线图，改变y轴标签。
+```{r Modify the breaks and labels of salary}
+ggplot(Salaries, aes(x = rank, y =salary, fill =sex))+
+  geom_boxplot()+
+  scale_y_continuous(breaks=c(50000,100000,150000,200000),labels=c("50K","100K","150K","200K"))+
+  labs(title="Boxplot of salary grouped by rank, color-coded  by sex")
+```
+
+#23.
+按照sex和rank分别绘制对应salary的箱线图，改变y轴数值。
+```{r Modify the limits of the y-axis}
+ggplot(Salaries, aes(x = rank, y =salary, fill =sex))+
+  geom_boxplot()+
+  scale_y_continuous(breaks=c(50000,100000,150000,200000),labels=c("50K","100K","150K","200K"),limits = c(50000,250000))+
+  labs(title="Boxplot of salary grouped by rank, color-coded  by sex")
+```
+
+#24.
+按照sex和rank分别绘制对应salary的箱线图，改变布局及图例。
+```{r}
+ggplot(Salaries, aes(x = rank, y =salary, fill =sex))+
+  geom_boxplot()+
+  scale_x_discrete(breaks =c("AsstProf","AssocProf","Prof"), labels=c("Assistant\nProfessor","Associate\nProfessor","Full\nProfessor"))+
+  scale_y_continuous(breaks=c(50000,100000,150000,200000),labels=c("50K","100K","150K","200K"),limits = c(50000,250000))+
+  theme_minimal()+
+  labs(fill="gender")+
+  theme(legend.position="top",legend.direction="horizontal")+
+  labs(title="Boxplot of salary grouped by rank, color-coded  by sex")
+```
